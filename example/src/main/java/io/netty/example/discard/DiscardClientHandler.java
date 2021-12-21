@@ -35,6 +35,12 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
 
         // Initialize the message.
         content = ctx.alloc().directBuffer(DiscardClient.SIZE).writeZero(DiscardClient.SIZE);
+        // content.writeBytes(" 客户端发来消息 ".getBytes());
+
+        ByteBuf message = ctx.alloc().buffer(1024);
+        message.writeBytes(" 客户端发来消息 ".getBytes());
+
+        ctx.writeAndFlush(content.retainedDuplicate());
 
         // Send the initial messages.
         generateTraffic();

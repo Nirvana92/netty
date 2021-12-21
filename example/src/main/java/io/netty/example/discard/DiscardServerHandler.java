@@ -26,6 +26,8 @@ public class DiscardServerHandler extends SimpleChannelInboundHandler<Object> {
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         // discard
+//        ByteBuf receiveMsg = (ByteBuf) msg;
+//        System.out.println("=== [server] 接收到的消息 ： " + receiveMsg.toString(Charset.forName("utf-8")));
     }
 
     @Override
