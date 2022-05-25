@@ -32,6 +32,9 @@ import static java.lang.Math.max;
 abstract class PoolArena<T> extends SizeClasses implements PoolArenaMetric {
     static final boolean HAS_UNSAFE = PlatformDependent.hasUnsafe();
 
+    /**
+     * 定义内存大小的枚举
+     */
     enum SizeClass {
         Small,
         Normal
