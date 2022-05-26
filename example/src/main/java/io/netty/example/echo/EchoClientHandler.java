@@ -19,12 +19,16 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.extern.slf4j.Slf4j;
+
+import java.nio.charset.Charset;
 
 /**
  * Handler implementation for the echo client.  It initiates the ping-pong
  * traffic between the echo client and server by sending the first message to
  * the server.
  */
+@Slf4j
 public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 
     private final ByteBuf firstMessage;
@@ -41,6 +45,12 @@ public class EchoClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
+        // 记录读取的下标位置
+        firstMessage.markReaderIndex();
+        log.info("发送的消息体: {}", firstMessage.readBytes(firstMessage.readableBytes()).toString(Charset.forName("utf-8")));
+
+        // 恢复上次记录的读取下标位置
+        firstMessage.resetReaderIndex();
         ctx.writeAndFlush(firstMessage);
     }
 

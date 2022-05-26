@@ -31,6 +31,8 @@ public class ReflectiveChannelFactory<T extends Channel> implements ChannelFacto
     public ReflectiveChannelFactory(Class<? extends T> clazz) {
         ObjectUtil.checkNotNull(clazz, "clazz");
         try {
+            // 在EchoServer 代码中参考调用了 {@link io.netty.bootstrap.AbstractBootstrap.channel}
+            // 此时会初始化channelFactory. 传入的clazz 为 NioServerSocketChannel.class
             this.constructor = clazz.getConstructor();
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException("Class " + StringUtil.simpleClassName(clazz) +
@@ -41,6 +43,8 @@ public class ReflectiveChannelFactory<T extends Channel> implements ChannelFacto
     @Override
     public T newChannel() {
         try {
+            // 通过反射创建对象
+            // 参考上面构造函数中的传入class, 可知此时创建的对象为 NioServerSocketChannel
             return constructor.newInstance();
         } catch (Throwable t) {
             throw new ChannelException("Unable to create Channel from class " + constructor.getDeclaringClass(), t);
