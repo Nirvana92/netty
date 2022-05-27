@@ -314,7 +314,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
         Channel channel = null;
         try {
             // 创建channel
-            // 根据EchoServer 配置的channnel 中的内容, 此时channel 的对象为NioServerSocketChannel
+            // 根据EchoServer 配置的channel 中的内容, 此时channel 的对象为NioServerSocketChannel
             channel = channelFactory.newChannel();
             // 初始化channel
             init(channel);
@@ -363,6 +363,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
             @Override
             public void run() {
                 if (regFuture.isSuccess()) {
+                    // channel 注册成功只有进行端口和地址的绑定
                     channel.bind(localAddress, promise).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
                 } else {
                     promise.setFailure(regFuture.cause());

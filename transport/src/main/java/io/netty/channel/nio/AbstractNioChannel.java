@@ -78,6 +78,8 @@ public abstract class AbstractNioChannel extends AbstractChannel {
      */
     protected AbstractNioChannel(Channel parent, SelectableChannel ch, int readInterestOp) {
         super(parent);
+        // 这里如果是服务端启动: 则此时的ch 为{@link ServerSocketChannel}
+        // 参考: {@link io.netty.channel.socket.nio.NioServerSocketChannel.newSocket}
         this.ch = ch;
         this.readInterestOp = readInterestOp;
         try {
@@ -377,6 +379,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         boolean selected = false;
         for (;;) {
             try {
+                // 调用JDK 底层的注册方法
                 selectionKey = javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
                 return;
             } catch (CancelledKeyException e) {

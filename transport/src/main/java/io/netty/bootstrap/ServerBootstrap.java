@@ -156,9 +156,13 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
                     pipeline.addLast(handler);
                 }
 
+                // 这里如果不进行异步添加 ServerBootstrapAcceptor 也是正常运行代码的。
+//                pipeline.addLast(new ServerBootstrapAcceptor(
+//                        ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));
                 ch.eventLoop().execute(new Runnable() {
                     @Override
                     public void run() {
+                        // 最后在pipeline 末尾添加一个 ServerBootstrapAcceptor
                         pipeline.addLast(new ServerBootstrapAcceptor(
                                 ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));
                     }
