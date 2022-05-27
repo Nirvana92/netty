@@ -129,9 +129,11 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
 
     @Override
     void init(Channel channel) {
+        // 设置channle 的配置参数
         setChannelOptions(channel, newOptionsArray(), logger);
         setAttributes(channel, attrs0().entrySet().toArray(EMPTY_ATTRIBUTE_ARRAY));
 
+        // ChannelPipeline 的实现类为 DefaultChannelPipeline
         ChannelPipeline p = channel.pipeline();
 
         final EventLoopGroup currentChildGroup = childGroup;
@@ -146,7 +148,10 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
             @Override
             public void initChannel(final Channel ch) {
                 final ChannelPipeline pipeline = ch.pipeline();
+                // 这里获取的是ServerBootstrap.handler 中配置的内容. EchoServer 中没有进行配置, 所以当前获取的handler 为空
                 ChannelHandler handler = config.handler();
+                logger.info("ServerBootstrap 初始化(init) 从配置中获取的handler: {}", handler);
+
                 if (handler != null) {
                     pipeline.addLast(handler);
                 }

@@ -314,6 +314,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
         Channel channel = null;
         try {
             // 创建channel
+            // 根据EchoServer 配置的channnel 中的内容, 此时channel 的对象为NioServerSocketChannel
             channel = channelFactory.newChannel();
             // 初始化channel
             init(channel);
