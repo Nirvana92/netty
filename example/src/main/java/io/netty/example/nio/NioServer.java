@@ -1,5 +1,10 @@
 package io.netty.example.nio;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.example.nio.reader.FixedLengthSocketReader;
+import io.netty.example.nio.reader.SocketReader;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -37,6 +42,8 @@ public class NioServer {
 
   private boolean stopServer = false;
 
+  private SocketReader socketReader;
+
   /** 初始化服务端 */
   public void initServer() throws IOException {
     ssc = ServerSocketChannel.open();
@@ -61,6 +68,8 @@ public class NioServer {
    */
   public void start() throws IOException {
     initServer();
+
+    socketReader = new FixedLengthSocketReader();
 
     syncListen();
     syncOperate();
@@ -112,9 +121,14 @@ public class NioServer {
                   if (selectionKey.isReadable()) {
                     // 读取链接的客户端发送的消息
                     SocketChannel channel = (SocketChannel) selectionKey.channel();
-                    String readMessage = read(channel);
-                    // 回写
-                    write(channel, readMessage);
+//                    String readMessage = read(channel);
+//                    String readMessage = readFixedLength(channel);
+
+                    String readMessage = socketReader.read(channel);
+                    if(!StringUtil.isNullOrEmpty(readMessage)) {
+                      // 回写
+                      write(channel, readMessage);
+                    }
                   }
 
                   iterator.remove();
@@ -134,7 +148,7 @@ public class NioServer {
   /**
    * 接受客户端的链接
    *
-   * @param selectionKey
+   * @param selectionKey 时间选择器
    * @throws IOException
    */
   public void acceptChannel(SelectionKey selectionKey) throws IOException {
@@ -149,24 +163,6 @@ public class NioServer {
     // 注册到operateSelector
     // 注册监听读事件
     socketChannel.register(operateSelector, SelectionKey.OP_READ);
-  }
-
-  /**
-   * 从客户端的连接读取消息
-   *
-   * @param channel 客户端连接
-   * @return
-   * @throws IOException
-   */
-  public String read(SocketChannel channel) throws IOException {
-    // System.out.println(selectionKey.channel());
-    ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-    channel.read(byteBuffer);
-
-    String str = new String(byteBuffer.array());
-    // System.out.println(str);
-    log.info("服务端读取的数据: {}", str);
-    return str;
   }
 
   /**
