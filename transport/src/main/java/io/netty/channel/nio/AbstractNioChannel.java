@@ -80,6 +80,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         super(parent);
         // 这里如果是服务端启动: 则此时的ch 为{@link ServerSocketChannel}
         // 参考: {@link io.netty.channel.socket.nio.NioServerSocketChannel.newSocket}
+        // ch = sun.nio.ch.ServerSocketChannelImpl[unbound]
         this.ch = ch;
         this.readInterestOp = readInterestOp;
         try {

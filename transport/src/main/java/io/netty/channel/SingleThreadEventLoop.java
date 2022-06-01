@@ -84,6 +84,9 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
     @Override
     public ChannelFuture register(final ChannelPromise promise) {
         ObjectUtil.checkNotNull(promise, "promise");
+        // channel = NioServerSocketChannel 也就是在创建EchoServer 的时候填入的channel
+        // unsafe 最终调用的是 io.netty.channel.AbstractChannel.newUnsafe(). 最后调用AbstractNioMessageChannel 的newUnsafe() 方法. 最后创建了 NioMessageUnsafe 对象
+        // register 最后就是调用NioMessageUnsafe 的register()方法.实际调用的是 io.netty.channel.nio.AbstractNioChannel.doRegister()
         promise.channel().unsafe().register(this, promise);
         return promise;
     }

@@ -498,15 +498,17 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                     return;
                 }
                 boolean firstRegistration = neverRegistered;
-                // 调用JDK 的注册方法
+                // 1. 调用JDK 的注册方法
                 doRegister();
                 neverRegistered = false;
                 registered = true;
 
                 // Ensure we call handlerAdded(...) before we actually notify the promise. This is needed as the
                 // user may already fire events through the pipeline in the ChannelFutureListener.
+                // 2. 执行pipeline 中的各种handler.
                 pipeline.invokeHandlerAddedIfNeeded();
 
+                //
                 safeSetSuccess(promise);
                 // 触发channel 的注册事件
                 pipeline.fireChannelRegistered();

@@ -48,6 +48,9 @@ public final class EchoServer {
 //            sslCtx = null;
 //        }
 
+        /**
+         * new NioEventLoopGroup() 的时候, 在初始化NioEventLoop 时会创建一个selector(注册器)
+         */
         // Configure the server.
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();

@@ -15,6 +15,7 @@
  */
 package io.netty.bootstrap;
 
+import io.netty.channel.AbstractChannel;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelConfig;
 import io.netty.channel.ChannelFuture;
@@ -51,6 +52,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
     private final Map<ChannelOption<?>, Object> childOptions = new LinkedHashMap<ChannelOption<?>, Object>();
     private final Map<AttributeKey<?>, Object> childAttrs = new ConcurrentHashMap<AttributeKey<?>, Object>();
     private final ServerBootstrapConfig config = new ServerBootstrapConfig(this);
+    // workGroup 配置的内容
     private volatile EventLoopGroup childGroup;
     private volatile ChannelHandler childHandler;
 
@@ -133,7 +135,10 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         setChannelOptions(channel, newOptionsArray(), logger);
         setAttributes(channel, attrs0().entrySet().toArray(EMPTY_ATTRIBUTE_ARRAY));
 
-        // ChannelPipeline 的实现类为 DefaultChannelPipeline
+        /**
+         * {@link AbstractChannel#newChannelPipeline()}
+         * ChannelPipeline 的实现类为 DefaultChannelPipeline
+         */
         ChannelPipeline p = channel.pipeline();
 
         final EventLoopGroup currentChildGroup = childGroup;
@@ -147,6 +152,8 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         p.addLast(new ChannelInitializer<Channel>() {
             @Override
             public void initChannel(final Channel ch) {
+                // ch = NioServerSocketChannel
+                logger.info("初始化 init(), ch: {}", ch.getClass());
                 final ChannelPipeline pipeline = ch.pipeline();
                 // 这里获取的是ServerBootstrap.handler 中配置的内容. EchoServer 中没有进行配置, 所以当前获取的handler 为空
                 ChannelHandler handler = config.handler();
