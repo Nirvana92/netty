@@ -75,6 +75,7 @@ public final class EchoServer {
              });
 
             // Start the server.
+            // sync()方法会阻塞当前线程, 直到服务器启动完成
             ChannelFuture f = b.bind(PORT).sync();
 
             // Wait until the server socket is closed.
