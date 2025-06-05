@@ -35,7 +35,7 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
 
         // Initialize the message.
         content = ctx.alloc().directBuffer(DiscardClient.SIZE).writeZero(DiscardClient.SIZE);
-
+//        System.out.println("channel-active: "+content.toString());
         // Send the initial messages.
         generateTraffic();
     }
@@ -69,6 +69,7 @@ public class DiscardClientHandler extends SimpleChannelInboundHandler<Object> {
         @Override
         public void operationComplete(ChannelFuture future) {
             if (future.isSuccess()) {
+//                System.out.println("operationComplete: "+content.toString());
                 generateTraffic();
             } else {
                 future.cause().printStackTrace();
