@@ -104,6 +104,10 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
      * The {@link Class} which is used to create {@link Channel} instances from.
      * You either use this or {@link #channelFactory(io.netty.channel.ChannelFactory)} if your
      * {@link Channel} implementation has no no-args constructor.
+     *
+     * 创建 channelFactory 对象, 通过在 ServerBootstrap#channel(NioServerSocketChannel.class) 方式注入class
+     *
+     * 在 bind() 方法中会调用 {@link AbstractBootstrap#doBind(SocketAddress)} 进行创建 NioServerSocketChannel 对象
      */
     public B channel(Class<? extends C> channelClass) {
         return channelFactory(new ReflectiveChannelFactory<C>(

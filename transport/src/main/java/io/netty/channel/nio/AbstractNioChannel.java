@@ -50,7 +50,13 @@ public abstract class AbstractNioChannel extends AbstractChannel {
     private static final InternalLogger logger =
             InternalLoggerFactory.getInstance(AbstractNioChannel.class);
 
+    /**
+     * 这个对应 JDK 中的ServerSocketChannel
+     */
     private final SelectableChannel ch;
+    /**
+     * 这个对应 JDK 中的SelectionKey.OP_READ 或者 SelectionKey.OP_ACCEPT 等等
+     */
     protected final int readInterestOp;
     volatile SelectionKey selectionKey;
     boolean readPending;
@@ -81,6 +87,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         this.ch = ch;
         this.readInterestOp = readInterestOp;
         try {
+            // 设置 serverSocketChannel 为非阻塞模式
             ch.configureBlocking(false);
         } catch (IOException e) {
             try {
