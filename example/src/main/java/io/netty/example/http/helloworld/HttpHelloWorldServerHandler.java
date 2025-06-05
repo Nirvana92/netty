@@ -25,6 +25,8 @@ import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static io.netty.handler.codec.http.HttpHeaderNames.CONNECTION;
 import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_LENGTH;
@@ -36,6 +38,7 @@ import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 
 public class HttpHelloWorldServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     private static final byte[] CONTENT = { 'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd' };
+    private static final Logger log = LoggerFactory.getLogger(HttpHelloWorldServerHandler.class);
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -53,6 +56,9 @@ public class HttpHelloWorldServerHandler extends SimpleChannelInboundHandler<Htt
             response.headers()
                     .set(CONTENT_TYPE, TEXT_PLAIN)
                     .setInt(CONTENT_LENGTH, response.content().readableBytes());
+
+            String uri = req.uri();
+            log.info("uri: {}, method: {}", uri, req.method());
 
             if (keepAlive) {
                 if (!req.protocolVersion().isKeepAliveDefault()) {

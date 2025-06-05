@@ -51,6 +51,8 @@ import io.netty.handler.codec.TooLongFrameException;
  *     after this decoder in the {@link ChannelPipeline}.</td>
  * </tr>
  * </table>
+ *
+ * http 请求解码器
  */
 public class HttpRequestDecoder extends HttpObjectDecoder {
 
