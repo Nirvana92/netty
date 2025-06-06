@@ -493,6 +493,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                     return;
                 }
                 boolean firstRegistration = neverRegistered;
+                // 执行到 AbstractNioChannel.doRegister() 方法, 并调用JDK 中的
                 doRegister();
                 neverRegistered = false;
                 registered = true;

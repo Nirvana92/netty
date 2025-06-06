@@ -384,6 +384,8 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         boolean selected = false;
         for (;;) {
             try {
+                // NioServerSocketChannel 注册监听时间, 得到selectionKey
+                // ops 参考 SelectionKey 的值
                 selectionKey = javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
                 return;
             } catch (CancelledKeyException e) {

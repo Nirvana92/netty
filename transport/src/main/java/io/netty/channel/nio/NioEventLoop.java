@@ -571,6 +571,9 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         }
     }
 
+    /**
+     * 监听到需要处理的时间, 该方法是处理时间的具体方法
+     */
     private void processSelectedKeys() {
         if (selectedKeys != null) {
             processSelectedKeysOptimized();
@@ -665,6 +668,11 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         }
     }
 
+    /**
+     * 处理单个的监听到的事件
+     * @param k 选择的事件key
+     * @param ch 选择的channel
+     */
     private void processSelectedKey(SelectionKey k, AbstractNioChannel ch) {
         final AbstractNioChannel.NioUnsafe unsafe = ch.unsafe();
         if (!k.isValid()) {
@@ -800,6 +808,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         return selector.selectNow();
     }
 
+    // 获取监听的时间, 如果返回的值 >0, 说明有时间可以获取, 通过selector.selectedKeys().iterator() 可以进行监听时间的遍历
     private int select(long deadlineNanos) throws IOException {
         if (deadlineNanos == NONE) {
             return selector.select();
