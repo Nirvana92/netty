@@ -25,6 +25,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 @Sharable
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
+    public final Integer val = 1;
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         System.out.println("Server received: " + msg);

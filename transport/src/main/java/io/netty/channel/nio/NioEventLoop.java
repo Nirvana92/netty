@@ -454,6 +454,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
                         nextWakeupNanos.set(curDeadlineNanos);
                         try {
                             if (!hasTasks()) {
+                                // 循环获取监听的事件
                                 strategy = select(curDeadlineNanos);
                             }
                         } finally {
@@ -800,6 +801,10 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         return deadlineNanos < nextWakeupNanos.get();
     }
 
+    /**
+     * serverSocketChannel 注册到 selector 中, 是注册到 unwrappedSelector 中的
+     * @return 返回的是 unwrappedSelector
+     */
     Selector unwrappedSelector() {
         return unwrappedSelector;
     }
